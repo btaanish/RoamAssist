@@ -129,10 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Container(
             child: Text(
               textFunc(text),
-              style: TextStyle(
-                color: Colors.brown,
-              ),
-            ),
+             ),
           )
         ],
       ),
