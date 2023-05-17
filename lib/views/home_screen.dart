@@ -3,6 +3,8 @@ import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
+import '../conn/client.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -15,17 +17,24 @@ class _HomeScreenState extends State<HomeScreen> {
   SpeechToText _speech = SpeechToText();
   String text = "";
   String textFunc(String s) {
-    print(s);
     if (s == "stand" ||
+        s == "Stand" ||
         s == "stand up" ||
+        s == "Stand up" ||
         s == "could you stand" ||
         s == "please stand") {
-      print("stand functionality invoked");
+      print("stand");
+      sendCommand("stand");
     } else if (s == "sit" ||
+        s == "Sit" ||
         s == "sit down" ||
+        s == "Sit down" ||
         s == "could you sit" ||
         s == "please sit") {
-      print("Sitting functionality invoked");
+      print("sit");
+      sendCommand("sit");
+    } else if (s == "start" || s == "Start") {
+      //sendCommand("start");
     }
     return "";
   }
@@ -61,7 +70,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const Padding(padding: EdgeInsets.only(bottom: 30.0)),
                   GestureDetector(
-                      onTap: () {},
+                      onTap: () async {
+                        sendCommand("start");
+                      },
                       child: Image.asset(
                         'assets/images/start.png',
                         height: 50,
@@ -88,7 +99,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 child: Center(
                   child: TextButton(
-                    onPressed: () async {},
+                    onPressed: () async {
+                      sendCommand("stand");
+                    },
                     child: const Text(
                       'Stand',
                       style: TextStyle(
@@ -112,7 +125,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 child: Center(
                   child: TextButton(
-                    onPressed: () async {},
+                    onPressed: () async {
+                      sendCommand("sit");
+                    },
                     child: const Text(
                       'Sit',
                       style: TextStyle(
@@ -150,6 +165,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   _speech.listen(
                     onResult: (val) => setState(() {
                       text = val.recognizedWords;
+                      print(text);
                     }),
                   );
                 });
@@ -159,6 +175,11 @@ class _HomeScreenState extends State<HomeScreen> {
           onTapUp: (details) {
             setState(() {
               _isListening = false;
+              print("Text before: " + text);
+              textFunc(text);
+              text="";
+              print("Text after: " + text);
+              
             });
             _speech.stop();
           },

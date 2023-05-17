@@ -1,15 +1,22 @@
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-Future<void> sendCommand() async {
-  const robotIP = "192.168.12.1"; // Replace with the robot's IP address
-  const endpoint = "/command"; // Replace with the robot's API endpoint
+Future<void> sendCommand(String command) async {
+    print('Sending command...');
+    var url = Uri.parse('http://192.168.123.15:5000/command');
 
-  final response = await http.post(Uri.http(robotIP, endpoint),
-      body: {"command": "move forward"}); // Replace with your command data
 
-  if (response.statusCode == 200) {
-    print("Command sent successfully");
-  } else {
-    print("Error sending command: ${response.statusCode}");
-  }
+    var response = await http.post(url, 
+        headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: json.encode(<String, String>{'command': command}));
+
+    if (response.statusCode == 200) {
+      print('Command sent successfully!');
+    }
+    
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+      
 }
