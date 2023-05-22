@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'package:roam_assist/constants.dart';
+import 'package:roam_assist/views/main_screen.dart';
 
 import 'home_screen.dart';
 
@@ -35,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return new Timer(duration, route);
   } route() {
     Navigator.pushReplacement(context, MaterialPageRoute(
-        builder: (context) => HomeScreen()
+        builder: (context) => MainScreen()
       )
     ); 
   }
