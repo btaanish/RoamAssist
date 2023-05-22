@@ -3,7 +3,6 @@ import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
-import '../conn/client.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -16,142 +15,66 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _isListening = false;
   SpeechToText _speech = SpeechToText();
   String text = "";
-  String textFunc(String s) {
-    if (s == "stand" ||
-        s == "Stand" ||
-        s == "stand up" ||
-        s == "Stand up" ||
-        s == "could you stand" ||
-        s == "please stand") {
-      print("stand");
-      sendCommand("stand");
-    } else if (s == "sit" ||
-        s == "Sit" ||
-        s == "sit down" ||
-        s == "Sit down" ||
-        s == "could you sit" ||
-        s == "please sit") {
-      print("sit");
-      sendCommand("sit");
-    } else if (s == "start" || s == "Start") {
-      //sendCommand("start");
-    }
-    return "";
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kPrimaryColor,
-      body: Column(
+      body: Column (
         children: [
-          //create a rectangular backgrund with broder radius
           Container(
-            height: MediaQuery.of(context).size.height * 0.4,
-            width: double.infinity,
-            decoration: const BoxDecoration(
-              // add color gradient background
-              color: kSecondaryColor,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(50),
-                bottomRight: Radius.circular(50),
-              ),
-            ),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    "Roam Assist",
-                    style: TextStyle(
-                        fontSize: 50.0,
-                        color: kTextColor,
-                        fontFamily: 'Poppins'),
-                  ),
-                  const Padding(padding: EdgeInsets.only(bottom: 30.0)),
-                  GestureDetector(
-                      onTap: () async {
-                        sendCommand("start");
-                      },
-                      child: Image.asset(
-                        'assets/images/start.png',
-                        height: 50,
-                        width: 50,
-                      ))
-                ],
-              ),
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 50),
+            child: Row(
+              children: [
+                const Icon(Icons.account_circle_outlined, size: 40, color: Colors.black),
+                const SizedBox(width: 10),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Text("Welcome!", style: TextStyle(fontFamily: 'Poppins', fontSize: 15, color: Colors.black)),
+                    Text("Pawan Patil", style: TextStyle(fontFamily: 'Poppins', fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black)),
+                  ],
+                ),
+                const Spacer(),
+                const Icon(Icons.menu_outlined, size: 30, color: Colors.black)
+              ],
             ),
           ),
 
           Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 30),
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Container(
-                margin: const EdgeInsets.all(30),
-                width: MediaQuery.of(context).size.width * 0.3,
-                height: MediaQuery.of(context).size.height * 0.05,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            margin: const EdgeInsets.symmetric(horizontal: 20),
+            decoration: BoxDecoration(
+              color: const Color.fromARGB(255, 212, 211, 211),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Row(
+              children: [
+                Text("Unitree Go 1", style: TextStyle(fontFamily: 'Poppins', fontSize: 20, color: Colors.black)),
+                const Spacer(),
+                Text("Offline", style: TextStyle(fontFamily: 'Poppins', fontSize: 15, color: Colors.black)),
+                // draw a circle here
+                Container(
+                  margin: const EdgeInsets.only(left: 5),
+                  width: 10,
+                  height: 10,
+                  decoration: const BoxDecoration(
+                    color: Colors.red,
+                    shape: BoxShape.circle,
                   ),
-                  color: kTextColor,
-                ),
-                child: Center(
-                  child: TextButton(
-                    onPressed: () async {
-                      sendCommand("stand");
-                    },
-                    child: const Text(
-                      'Stand',
-                      style: TextStyle(
-                        color: kPrimaryColor,
-                        fontSize: 20,
-                        fontFamily: 'Poppins',
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.all(30),
-                width: MediaQuery.of(context).size.width * 0.3,
-                height: MediaQuery.of(context).size.height * 0.05,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10),
-                  ),
-                  color: kTextColor,
-                ),
-                child: Center(
-                  child: TextButton(
-                    onPressed: () async {
-                      sendCommand("sit");
-                    },
-                    child: const Text(
-                      'Sit',
-                      style: TextStyle(
-                        color: kPrimaryColor,
-                        fontSize: 20,
-                        fontFamily: 'Poppins',
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ]),
+                )
+              ],
+            ),
           ),
-          Container(
-            child: Text(
-              textFunc(text),
-             ),
-          )
+
+
         ],
       ),
+
       floatingActionButton: AvatarGlow(
         animate: _isListening,
         glowColor: Theme.of(context).primaryColor,
-        endRadius: 75.0,
+        endRadius: 40.0,
         duration: const Duration(milliseconds: 2000),
         repeatPauseDuration: const Duration(milliseconds: 100),
         repeat: true,
@@ -176,7 +99,6 @@ class _HomeScreenState extends State<HomeScreen> {
             setState(() {
               _isListening = false;
               print("Text before: " + text);
-              textFunc(text);
               text="";
               print("Text after: " + text);
               
@@ -186,10 +108,38 @@ class _HomeScreenState extends State<HomeScreen> {
           child: CircleAvatar(
             backgroundColor: kPrimaryColor,
             radius: 30,
-            child: Icon(_isListening ? Icons.mic : Icons.mic_none),
+            child: Icon(_isListening ? Icons.mic : Icons.mic_none, size: 40, color: Colors.black,),
           ),
+          
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+
+      bottomNavigationBar: BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        
+        color: Colors.black,
+        notchMargin: 10,
+        child: Container(
+          height: 60,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.volume_up_outlined, color: Colors.white,),
+              ),
+              SizedBox(width: 50,),
+              IconButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, 'splash_screen');
+                },
+                icon: const Icon(Icons.power_settings_new, color: Colors.white,),
+              ),
+            ],
+          ),
+        ),
+      )
     );
   }
 }
