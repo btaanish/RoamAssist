@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
 import '../conn/client.dart';
+import 'coordinates_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -40,15 +41,7 @@ class _MainScreenState extends State<MainScreen> {
     return "";
   }
 
-  List<DropdownMenuItem<String>> get dropdownItems{
-    List<DropdownMenuItem<String>> menuItems = [
-      DropdownMenuItem(child: Text("Select your map"),value: "Select your map"),
-      DropdownMenuItem(child: Text("SOC Com 3"),value: "SOC Com 3"),
-    ];
-    return menuItems;
-  }
 
-  String selectedValue = "Select your map";
 
   @override
   Widget build(BuildContext context) {
@@ -177,116 +170,30 @@ class _MainScreenState extends State<MainScreen> {
              ),
           ),
 
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 30),
-            child: DropdownButton(
-              value: selectedValue,
-              borderRadius: BorderRadius.circular(20),
-              style: TextStyle(color: Colors.black, fontSize: 20, fontFamily: 'Poppins'),
-              focusColor: const Color.fromARGB(255, 212, 211, 211),
-              isExpanded: true,
-              dropdownColor: const Color.fromARGB(255, 212, 211, 211),
-              items: dropdownItems,
-              onChanged: (value) {
-                setState(() {
-                  selectedValue = value.toString();
-                });
-              },
-            )
-          ),
 
-
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-            child: Column(
-              children: [
-                TextButton(
-                  onPressed: () {
-                    
-                  }, 
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 212, 211, 211),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Text("Position 1", style: TextStyle(fontFamily: 'Poppins', fontSize: 20, color: Colors.black)),
-                        Spacer(),
-                        Icon(Icons.arrow_circle_right, color: Colors.black),
-                      ],
-                    ),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    
-                  }, 
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 212, 211, 211),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Text("Position 1", style: TextStyle(fontFamily: 'Poppins', fontSize: 20, color: Colors.black)),
-                        Spacer(),
-                        Icon(Icons.arrow_circle_right, color: Colors.black),
-                      ],
-                    ),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    
-                  }, 
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 212, 211, 211),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Text("Position 1", style: TextStyle(fontFamily: 'Poppins', fontSize: 20, color: Colors.black)),
-                        Spacer(),
-                        Icon(Icons.arrow_circle_right, color: Colors.black),
-                      ],
-                    ),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    
-                  }, 
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 212, 211, 211),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Text("Position 1", style: TextStyle(fontFamily: 'Poppins', fontSize: 20, color: Colors.black)),
-                        Spacer(),
-                        Icon(Icons.arrow_circle_right, color: Colors.black),
-                      ],
-                    ),
-                  ),
+          SizedBox(height: 20,),
+          TextButton(
+            style: ButtonStyle(
+                backgroundColor: MaterialStatePropertyAll(Colors.black),
+                alignment: Alignment.center,
+                shape: MaterialStateProperty.all(
+                  RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                  )
                 )
-              ],
             ),
-          )
+            onPressed: () {
+              Navigator.pushNamed(context, 'coordinates_screen');
+            },
+            child: Text(
+              'Add Coordinates',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
 
-          
-
-
+              ),
+            ),
+          ),
         ],
       ),
 
@@ -350,12 +257,15 @@ class _MainScreenState extends State<MainScreen> {
                 icon: const Icon(Icons.volume_up_outlined, color: Colors.white,),
               ),
               SizedBox(width: 50,),
+
               IconButton(
                 onPressed: () {
                   Navigator.pushNamed(context, 'home_screen');
                 },
                 icon: const Icon(Icons.power_settings_new, color: Colors.white,),
               ),
+
+
             ],
           ),
         ),

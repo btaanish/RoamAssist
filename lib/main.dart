@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:roam_assist/views/coordinates_screen.dart';
 import 'package:roam_assist/views/home_screen.dart';
 import 'package:roam_assist/views/main_screen.dart';
 import 'package:roam_assist/views/splash_screen.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -24,6 +26,7 @@ class MyApp extends StatelessWidget {
         'splash_screen': (context) => const SplashScreen(),
         'home_screen': (context) => const HomeScreen(),
         'main_screen':(context) => const MainScreen(),
+        'coordinates_screen':(context) => const Coordinates(),
       },
     );
   }
