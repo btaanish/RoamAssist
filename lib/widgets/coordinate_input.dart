@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:roam_assist/models/coordinates.dart';
 
 
 class CoordinateInputScreen extends StatefulWidget {
-  const CoordinateInputScreen({Key? key}) : super(key: key);
+
+  Function addCoordinates;
+
+  CoordinateInputScreen({required this.addCoordinates});
 
   @override
   State<CoordinateInputScreen> createState() => _CoordinateInputScreenState();
@@ -68,8 +72,9 @@ class _CoordinateInputScreenState extends State<CoordinateInputScreen> {
                         backgroundColor: MaterialStatePropertyAll(Colors.black),
                         alignment: Alignment.center),
                     onPressed: () {
+                      Coordinates c = Coordinates(latitude: latitude, longitude: longitude);
                       setState(() {
-
+                        widget.addCoordinates(c);
                       });
                       //to remove bottom sheet once added task
                       Navigator.pop(context);

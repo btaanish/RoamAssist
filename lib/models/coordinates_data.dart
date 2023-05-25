@@ -1,7 +1,7 @@
 import 'coordinates.dart';
 import 'package:flutter/foundation.dart';
 
-class CoordinatesData {
+class CoordinatesData extends ChangeNotifier {
   List<Coordinates> coordinates_list = [
 
   ];
