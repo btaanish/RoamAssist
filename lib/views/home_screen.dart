@@ -1,17 +1,21 @@
 import 'package:roam_assist/constants.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
+import 'package:roam_assist/models/coordinates.dart';
 import 'package:speech_to_text/speech_to_text.dart';
+import 'package:roam_assist/navigation.dart';
 
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
+  
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
   bool _isListening = false;
   SpeechToText _speech = SpeechToText();
   String text = "";
@@ -126,12 +130,15 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                },
                 icon: const Icon(Icons.volume_up_outlined, color: Colors.white,),
               ),
               SizedBox(width: 50,),
               IconButton(
                 onPressed: () {
+                  Navigation navigate = Navigation();
+                  navigate.getRoute(Coordinates(latitude: 1.2946900584496173, longitude: 103.77341260752276), Coordinates(latitude: 1.2948466915714363, longitude: 103.77367303592946));
                   Navigator.pushNamed(context, 'splash_screen');
                 },
                 icon: const Icon(Icons.power_settings_new, color: Colors.white,),
