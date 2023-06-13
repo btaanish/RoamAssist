@@ -5,6 +5,7 @@ import 'package:roam_assist/views/home_screen.dart';
 import 'package:roam_assist/views/main_screen.dart';
 import 'package:roam_assist/views/splash_screen.dart';
 import 'models/coordinates_data.dart';
+import 'views/map_screen.dart';
 
 
 void main() {
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
           'home_screen': (context) => const HomeScreen(),
           'main_screen':(context) => const MainScreen(),
           'coordinates_screen':(context) => const CoordinatesScreen(),
+
         },
       ),
     );

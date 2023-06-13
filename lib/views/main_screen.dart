@@ -190,10 +190,11 @@ class _MainScreenState extends State<MainScreen> {
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 20,
-
               ),
             ),
           ),
+          SizedBox(height: 20,),
+
         ],
       ),
 
@@ -264,8 +265,6 @@ class _MainScreenState extends State<MainScreen> {
                 },
                 icon: const Icon(Icons.power_settings_new, color: Colors.white,),
               ),
-
-
             ],
           ),
         ),

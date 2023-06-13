@@ -44,9 +44,9 @@ class CoordinateTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
         title: Text(longitude.toString(),
-        style: TextStyle(fontSize: 20),
+        style: TextStyle(fontSize: 15),
         ),
-      trailing: Text(latitude.toString(), style: TextStyle(fontSize: 20),),
+      trailing: Text(latitude.toString(), style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),),
     );
   }
 }

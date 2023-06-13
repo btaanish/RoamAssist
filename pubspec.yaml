@@ -41,6 +41,8 @@ dependencies:
   speech_to_text: ^6.1.1
   provider: ^6.0.5
   html: ^0.15.3
+  google_maps_flutter: ^2.2.8
+  location: ^4.4.0
 
 
 dev_dependencies:

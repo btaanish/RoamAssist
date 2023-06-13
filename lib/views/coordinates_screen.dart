@@ -34,85 +34,108 @@ class _CoordinatesScreenState extends State<CoordinatesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          SizedBox(
-            height: 100,
+    return MaterialApp(
+      theme: ThemeData(
+        useMaterial3: true,
+        colorSchemeSeed: Colors.white,
+      ),
+      home: Scaffold(
+        appBar: AppBar(
+          leading: BackButton(onPressed: () => {Navigator.pop(context)}),
+          title: const Text(
+            'Map',
+            style: TextStyle(fontWeight: FontWeight.w600),
           ),
-          Container(
-              margin: const EdgeInsets.symmetric(horizontal: 30),
-              child: DropdownButton(
-                value: selectedValue,
-                borderRadius: BorderRadius.circular(20),
-                style: TextStyle(
-                    color: Colors.black, fontSize: 20, fontFamily: 'Poppins'),
-                focusColor: const Color.fromARGB(255, 212, 211, 211),
-                isExpanded: true,
-                dropdownColor: const Color.fromARGB(255, 212, 211, 211),
-                items: dropdownItems,
-                onChanged: (value) {
-                  setState(() {
-                    selectedValue = value.toString();
-                  });
-                },
-              )),
-          SizedBox(
-            height: 100,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 52, right: 59),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [Text('Longitude', style: TextStyle(fontSize: 20),), Text('Latitude', style: TextStyle(fontSize: 20),)],
+          elevation: 2,
+        ),
+        body: Column(
+          children: [
+            SizedBox(
+              height: 100,
             ),
-          ),
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20)),
-              ),
-              child: CoordinatesList(
-                coord_list: coordinates_list,
-              ),
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 90, vertical: 20),
-            child: Column(
-              children: [
-                TextButton(
-                  onPressed: () {
-                    showModalBottomSheet(
-                        context: context, builder: buildBottomSheet);
+            Container(
+                margin: const EdgeInsets.symmetric(horizontal: 30),
+                child: DropdownButton(
+                  value: selectedValue,
+                  borderRadius: BorderRadius.circular(20),
+                  style: const TextStyle(
+                      color: Colors.black, fontSize: 20, fontFamily: 'Poppins'),
+                  focusColor: const Color.fromARGB(255, 212, 211, 211),
+                  isExpanded: true,
+                  dropdownColor: const Color.fromARGB(255, 212, 211, 211),
+                  items: dropdownItems,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedValue = value.toString();
+                    });
                   },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 212, 211, 211),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Text("Add Position",
-                            style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 20,
-                                color: Colors.black)),
-                        Spacer(),
-                        Icon(Icons.arrow_circle_right, color: Colors.black),
-                      ],
+                )),
+            SizedBox(
+              height: 100,
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: 52, right: 59),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Longitude',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  Text(
+                    'Latitude',
+                    style: TextStyle(fontSize: 20),
+                  )
+                ],
+              ),
+            ),
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20)),
+                ),
+                child: CoordinatesList(
+                  coord_list: coordinates_list,
+                ),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
+              child: Column(
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      showModalBottomSheet(
+                          context: context, builder: buildBottomSheet);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 212, 211, 211),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("Add Position",
+                              style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 20,
+                                  color: Colors.black)),
+                          Spacer(),
+                          Icon(Icons.arrow_circle_right, color: Colors.black),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
     ;
