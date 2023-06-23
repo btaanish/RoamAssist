@@ -39,6 +39,7 @@ class _CoordinatesScreenState extends State<CoordinatesScreen> {
         useMaterial3: true,
         colorSchemeSeed: Colors.white,
       ),
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           leading: BackButton(onPressed: () => {Navigator.pop(context)}),
@@ -101,6 +102,39 @@ class _CoordinatesScreenState extends State<CoordinatesScreen> {
                 ),
               ),
             ),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
+              child: Column(
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 212, 211, 211),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("Take me there",
+                              style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 20,
+                                  color: Colors.black)),
+                          Spacer(),
+                          Icon(Icons.arrow_circle_right, color: Colors.black),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
               child: Column(
