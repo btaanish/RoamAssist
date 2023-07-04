@@ -1,9 +1,9 @@
+// @dart=3.0.5
 import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-
 
 class MapScreen extends StatefulWidget {
   Function addCoordinates;
@@ -27,7 +27,6 @@ class _MapScreenState extends State<MapScreen> {
 
   LocationData? currentLocation;
   LatLng? selectedLocation = const LatLng(0.0, 0.0);
-
 
   void getCurrentLocation() async {
     Location location = Location();
@@ -70,7 +69,7 @@ class _MapScreenState extends State<MapScreen> {
   // }
 
   BitmapDescriptor markerIcon = BitmapDescriptor.defaultMarker;
-  
+
   // void addCustomIcon() {
   //   BitmapDescriptor.fromAssetImage(const ImageConfiguration(), 'assets/images/cutedogmarker.png').then((value){
   //     setState(() {
@@ -78,7 +77,6 @@ class _MapScreenState extends State<MapScreen> {
   //     });
   //   });
   // }
-
 
   @override
   void initState() {
