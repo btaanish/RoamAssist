@@ -3,8 +3,6 @@ import 'package:roam_assist/constants.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart';
-import 'package:audioplayers/audioplayers.dart';
-import 'package:assets_audio_player/assets_audio_player.dart';
 import '../conn/client.dart';
 import 'coordinates_screen.dart';
 
@@ -20,16 +18,15 @@ enum Locations { goal1, goal2, goal3, goal4, goal5 }
 class _MainScreenState extends State<MainScreen> {
   bool _isListening = false;
   bool _isOnline = false;
-  bool _isPaused = false;
+  bool _isRunning = false;
   String currentStatus = "Idle";
   SpeechToText _speech = SpeechToText();
-  final player = AudioPlayer();
-  List<String> maps = ["Map 1","Map 2"];
-  String? selectedMap = "Map 1";
-  List<String> locations1 = ["LOC1","LOC2"];
-  List<String> locations2 = ["LOC11","LOC22"];
-  String? selectedStart = "LOC1";
-  String? selectedEnd = "LOC11";
+  List<String> maps = ["Maps"];
+  String? selectedMap = "Maps";
+  List<String> locations1 = ["Locations"];
+  List<String> locations2 = ["Locations"];
+  String? selectedStart = "Locations";
+  String? selectedEnd = "Locations";
   String text = "";
   String textFunc(String s) {
     if (s == "stand" ||
@@ -51,7 +48,7 @@ class _MainScreenState extends State<MainScreen> {
       sendCommand("sit");
       currentStatus = "Sitting";
     } else if (s == "start" || s == "Start") {
-      //sendCommand("start");
+      // sendCommand("start");
       currentStatus = "Idle";
     } else if (s == "go to position one" ||
             s == "please go to position one" ||
@@ -67,10 +64,6 @@ class _MainScreenState extends State<MainScreen> {
           sendCommand("start_nav");
           print("Goal ID: 1");
           sendCommand("goal1");
-          // AssetsAudioPlayer.newPlayer().open(
-          //   Audio("assets/sounds/go.wav"),
-          //   showNotification: true,
-          // );
     } else if (s == "go to position 1" ||
         s == "please go to position 1" ||
         s == "could you go to position 1" ||
@@ -86,10 +79,6 @@ class _MainScreenState extends State<MainScreen> {
       sendCommand("start_nav");
       print("Goal ID: 1");
       sendCommand("goal1");
-      // AssetsAudioPlayer.newPlayer().open(
-      //   Audio("assets/sounds/go.wav"),
-      //   showNotification: true,
-      // );
     } else if (s == "go to position 2" ||
         s == "please go to position 2" ||
         s == "could you go to position 2" ||
@@ -132,7 +121,6 @@ class _MainScreenState extends State<MainScreen> {
       sendCommand("start_nav");
       print("Goal ID: 4");
       sendCommand("goal4");
-      // player.play(AssetSource('sounds/go.wav'));
     } else if (s == "go to position 5" ||
         s == "please go to position 5" ||
         s == "could you go to position 5" ||
@@ -153,12 +141,10 @@ class _MainScreenState extends State<MainScreen> {
         s == "I would like to add coordinates" ||
         s == "Add coordinates" ||
         s == "Please add coordinates" ||
-        s == "Could you add coordinates" ||
-        s == "I would like to add coordinates") {
+        s == "Could you add coordinates") {
       Navigator.pushNamed(context, 'coordinates_screen');
     }
-
-    return s;
+    return "";
   }
   List<String> textToList(String s) {
     s = s + ',';
@@ -192,7 +178,6 @@ class _MainScreenState extends State<MainScreen> {
     print(s + " , " + sentences[0] + sentences[1]);
     return sentences;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -333,7 +318,7 @@ class _MainScreenState extends State<MainScreen> {
             ),
             Container(
               child: Text(
-                textFunc(text),
+                text,
               ),
             ),
 
@@ -360,12 +345,7 @@ class _MainScreenState extends State<MainScreen> {
                   ))).toList(),
                   value: selectedMap,
                   onChanged: (map) async {
-                    print("/////////////////////////////////////////");
-                    print(map.toString());
-                    print("???????????????????????????????????????????");
                     String s4 = await sendCommand("get_start_and_goal:" + map.toString());
-                    print(s4);
-                    // String s4 = "room1, room2:room3, room4";
                     setState(()  {
                     selectedMap = map;
                     List<String> locs = textBefColon(s4);
@@ -401,7 +381,7 @@ class _MainScreenState extends State<MainScreen> {
                   value: selectedStart,
                   onChanged: (start) => setState(() {
                     selectedStart = start;
-                    print("set_initial_pose:" + selectedStart.toString());
+                    // print("set_initial_pose:" + selectedStart.toString());
                     sendCommand("set_initial_pose:" + selectedStart.toString());
                   })),
             ),
@@ -429,7 +409,7 @@ class _MainScreenState extends State<MainScreen> {
                   value: selectedEnd,
                   onChanged: (end) => setState(() {
                     selectedEnd = end;
-                    print("set_goal:" + selectedEnd.toString());
+                    // print("set_goal:" + selectedEnd.toString());
                     sendCommand("set_goal:" + selectedEnd.toString());
                   })),
             ),
@@ -451,9 +431,6 @@ class _MainScreenState extends State<MainScreen> {
                   onPressed: () {
                     currentStatus = "Walking";
                     sendCommand("start_move");
-                    // String goal_id = _character.toString().split('.').last;
-                    // print("Goal ID: $goal_id");
-                    // sendCommand(goal_id);
                   },
                   child: const Text(
                     'Start Navigation',
@@ -501,8 +478,6 @@ class _MainScreenState extends State<MainScreen> {
           repeat: true,
           child: GestureDetector(
             onTapDown: (details) async {
-              // await player.setSource(AssetSource('assets/sounds/siri-high.mp3'));
-              // await player.resume();
               if (!_isListening) {
                 bool availability = await _speech.initialize();
                 if (availability == true) {
@@ -528,7 +503,6 @@ class _MainScreenState extends State<MainScreen> {
 
               });
               _speech.stop();
-              // await player.play(AssetSource("sounds/go.wav"));
             },
             child: CircleAvatar(
               backgroundColor: kPrimaryColor,
@@ -552,13 +526,19 @@ class _MainScreenState extends State<MainScreen> {
               children: [
                 IconButton(
                   onPressed: () {
-                    sendCommand("pause_move");
+                    if (_isRunning) {
+                      sendCommand("pause_move");
+                      currentStatus = "Standing Idle";
+                    } else {
+                      sendCommand("start_move");
+                      currentStatus = "Walking";
+                    }
                     setState(() {
-                      _isPaused = !_isPaused;
+                      _isRunning = !_isRunning;
                     });
                   },
                   icon: Icon(
-                     _isPaused ? Icons.play_arrow_rounded : Icons.pause,
+                     _isRunning ? Icons.pause : Icons.play_arrow_rounded,
                     color: Colors.white,),
                 ),
                 SizedBox(width: 50,),
