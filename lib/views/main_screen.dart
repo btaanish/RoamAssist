@@ -418,47 +418,74 @@ class _MainScreenState extends State<MainScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                TextButton(
-                  style: ButtonStyle(
-                      backgroundColor: const MaterialStatePropertyAll(Colors.black),
-                      alignment: Alignment.center,
-                      shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12.0),
-                          )
-                      )
-                  ),
+                // TextButton(
+                //   style: ButtonStyle(
+                //       backgroundColor: const MaterialStatePropertyAll(Colors.black),
+                //       alignment: Alignment.center,
+                //       shape: MaterialStateProperty.all(
+                //           RoundedRectangleBorder(
+                //             borderRadius: BorderRadius.circular(12.0),
+                //           )
+                //       )
+                //   ),
+                //   onPressed: () {
+                //     currentStatus = "Walking";
+                //     sendCommand("start_move");
+                //   },
+                //   child: const Text(
+                //     'Start Navigation',
+                //     style: TextStyle(
+                //       color: Colors.white,
+                //       fontSize: 20,
+                //     ),
+                //   ),
+                // ),
+                // const SizedBox(width: 30,),
+                // TextButton(
+                //   style: ButtonStyle(
+                //       backgroundColor: const MaterialStatePropertyAll(Colors.black),
+                //       alignment: Alignment.center,
+                //       shape: MaterialStateProperty.all(
+                //           RoundedRectangleBorder(
+                //             borderRadius: BorderRadius.circular(12.0),
+                //           )
+                //       )
+                //   ),
+                //   onPressed: () {
+                //     Navigator.pushNamed(context, 'coordinates_screen');
+                //   },
+                //   child: Text(
+                //     'Add Coordinates',
+                //     style: TextStyle(
+                //       color: Colors.white,
+                //       fontSize: 20,
+                //     ),
+                //   ),
+                // ),
+                ElevatedButton(
                   onPressed: () {
-                    currentStatus = "Walking";
-                    sendCommand("start_move");
+                    Navigator.pushNamed(context, 'lidar_screen');
                   },
-                  child: const Text(
-                    'Start Navigation',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
+
+                  child: const Text('Lidar', style: TextStyle(fontSize: 20, color: Colors.white),),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
                     ),
                   ),
                 ),
-                const SizedBox(width: 30,),
-                TextButton(
-                  style: ButtonStyle(
-                      backgroundColor: const MaterialStatePropertyAll(Colors.black),
-                      alignment: Alignment.center,
-                      shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12.0),
-                          )
-                      )
-                  ),
+                SizedBox(width: 20,),
+                ElevatedButton(
                   onPressed: () {
                     Navigator.pushNamed(context, 'coordinates_screen');
                   },
-                  child: Text(
-                    'Add Coordinates',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
+
+                  child: const Text('GPS', style: TextStyle(fontSize: 20, color: Colors.white),),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
                     ),
                   ),
                 ),

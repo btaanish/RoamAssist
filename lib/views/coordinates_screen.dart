@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:roam_assist/widgets/coordinate_input.dart';
 import 'package:roam_assist/models/coordinates.dart';
 import 'package:roam_assist/widgets/coordinates_list.dart';
+import 'dart:async';
+import 'package:geolocator/geolocator.dart';
 
 class CoordinatesScreen extends StatefulWidget {
   const CoordinatesScreen({super.key});
@@ -18,7 +20,7 @@ class _CoordinatesScreenState extends State<CoordinatesScreen> {
     coordinates_list.add(c);
   }
 
-  String selectedValue = "Select your map";
+  // String selectedValue = "Select your map";
 
   Widget buildBottomSheet(BuildContext context) {
     return CoordinateInputScreen(addCoordinates: addCoordinates);
@@ -31,6 +33,60 @@ class _CoordinatesScreenState extends State<CoordinatesScreen> {
       DropdownMenuItem(child: Text("SOC Com 3"), value: "SOC Com 3"),
     ];
     return menuItems;
+  }
+
+  // For Live Location!
+  double long = 0.00;
+  double lat = 0.00;
+
+  StreamSubscription<Position>? positionStream;
+
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    // Checks and request for location permission
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    final LocationSettings locationSettings = LocationSettings(
+      accuracy: LocationAccuracy.high,
+      distanceFilter: 0, // distance moved before next location ping
+    );
+    positionStream =
+    Geolocator.getPositionStream(locationSettings: locationSettings)
+        .listen((Position? position) {
+
+      setState(() {
+        position == null
+            ? 'Unknown'
+            : {
+          lat = position.latitude,
+          long = position.longitude
+        };
+      });
+    });
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    return await Geolocator.getCurrentPosition();
   }
 
   @override
@@ -53,25 +109,59 @@ class _CoordinatesScreenState extends State<CoordinatesScreen> {
         body: Column(
           children: [
             SizedBox(
-              height: 100,
+              height: 20,
             ),
-            Container(
-                margin: const EdgeInsets.symmetric(horizontal: 30),
-                child: DropdownButton(
-                  value: selectedValue,
-                  borderRadius: BorderRadius.circular(20),
-                  style: const TextStyle(
-                      color: Colors.black, fontSize: 20, fontFamily: 'Poppins'),
-                  focusColor: const Color.fromARGB(255, 212, 211, 211),
-                  isExpanded: true,
-                  dropdownColor: const Color.fromARGB(255, 212, 211, 211),
-                  items: dropdownItems,
-                  onChanged: (value) {
-                    setState(() {
-                      selectedValue = value.toString();
-                    });
-                  },
-                )),
+            Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        _determinePosition();
+                      },
+                      child: Text('start tracking'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        positionStream?.pause();
+                        setState(() {
+                          lat = 0.00;
+                          long = 0.00;
+                        });
+                      },
+                      child: Text('stop tracking'),
+                    ),
+                  ],
+                ),
+                Center(
+                  child: Column(
+                    children: [
+                      Text(long.toString()),
+                      Text(lat.toString()),
+                    ],
+                  ),
+                )
+              ],
+            ),
+
+            // Container(
+            //     margin: const EdgeInsets.symmetric(horizontal: 30),
+            //     child: DropdownButton(
+            //       value: selectedValue,
+            //       borderRadius: BorderRadius.circular(20),
+            //       style: const TextStyle(
+            //           color: Colors.black, fontSize: 20, fontFamily: 'Poppins'),
+            //       focusColor: const Color.fromARGB(255, 212, 211, 211),
+            //       isExpanded: true,
+            //       dropdownColor: const Color.fromARGB(255, 212, 211, 211),
+            //       items: dropdownItems,
+            //       onChanged: (value) {
+            //         setState(() {
+            //           selectedValue = value.toString();
+            //         });
+            //       },
+            //     )),
             SizedBox(
               height: 100,
             ),

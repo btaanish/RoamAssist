@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:roam_assist/views/coordinates_screen.dart';
+import 'package:roam_assist/views/gps_screen.dart';
 import 'package:roam_assist/views/home_screen.dart';
+import 'package:roam_assist/views/lidar_screen.dart';
+import 'package:roam_assist/views/livelocation_screen.dart';
 import 'package:roam_assist/views/main_screen.dart';
 import 'package:roam_assist/views/splash_screen.dart';
 import 'models/coordinates_data.dart';
@@ -32,7 +35,9 @@ class MyApp extends StatelessWidget {
           'home_screen': (context) => const HomeScreen(),
           'main_screen':(context) => const MainScreen(),
           'coordinates_screen':(context) => const CoordinatesScreen(),
-
+          'livelocation_screen': (context) => const LiveLocationScreen(),
+          'gps_screen': (context) => const GpsScreen(),
+          'lidar_screen': (context) => const LidarScreen(),
         },
       ),
     );

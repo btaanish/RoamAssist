@@ -44,6 +44,8 @@ dependencies:
   google_maps_flutter: ^2.2.8
   location: ^4.4.0
   group_button: ^5.2.2
+  geolocator: ^9.0.2
+
 
 
 dev_dependencies:
