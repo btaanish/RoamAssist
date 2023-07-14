@@ -40,12 +40,15 @@ class _CoordinatesScreenState extends State<CoordinatesScreen> {
   double lat = 0.00;
 
   StreamSubscription<Position>? positionStream;
+  bool stream_status = false;
 
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
 
     // Test if location services are enabled.
+
+    stream_status = true;
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       return Future.error('Location services are disabled.');
@@ -118,7 +121,12 @@ class _CoordinatesScreenState extends State<CoordinatesScreen> {
                   children: [
                     TextButton(
                       onPressed: () {
-                        _determinePosition();
+                        if (stream_status == false) {
+                          _determinePosition();
+                        } else {
+                          positionStream?.resume();
+                        }
+
                       },
                       child: Text('start tracking'),
                     ),
