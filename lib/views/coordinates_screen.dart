@@ -5,6 +5,8 @@ import 'package:roam_assist/models/coordinates.dart';
 import 'package:roam_assist/widgets/coordinates_list.dart';
 import 'dart:async';
 import 'package:geolocator/geolocator.dart';
+import 'package:roam_assist/navigation.dart';
+
 
 class CoordinatesScreen extends StatefulWidget {
   const CoordinatesScreen({super.key});
@@ -232,8 +234,10 @@ class _CoordinatesScreenState extends State<CoordinatesScreen> {
                 children: [
                   TextButton(
                     onPressed: () {
-                      showModalBottomSheet(
-                          context: context, builder: buildBottomSheet);
+                      Navigation navigate = Navigation();
+                      navigate.getRoute(Coordinates(latitude: 1.2946900584496173, longitude: 103.77341260752276), Coordinates(latitude: 1.2948466915714363, longitude: 103.77367303592946));
+                      // showModalBottomSheet(
+                      //     context: context, builder: buildBottomSheet);
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
