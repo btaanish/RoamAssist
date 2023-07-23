@@ -4,13 +4,9 @@ import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:roam_assist/views/control_screen.dart';
 import 'package:roam_assist/views/sound_screen.dart';
-import 'package:speech_to_text/speech_to_text.dart';
-// import 'package:audioplayers/audioplayers.dart';
-// import 'package:assets_audio_player/assets_audio_player.dart';
 import '../conn/client.dart';
 import 'coordinates_screen.dart';
 import 'package:string_validator/string_validator.dart';
-// import 'package:just_audio/just_audio.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'maps_list.dart';
 
@@ -38,11 +34,8 @@ class _LocationScreenState extends State<LocationScreen> {
   bool _isOnline = false;
   bool _isRunning = false;
   String currentStatus = "Idle";
-  SpeechToText _speech = SpeechToText();
   final player = AudioPlayer();
-
   bool mapFlag = false;
-
   String? selectedStart = "Locations";
   String? selectedEnd = "Locations";
   List<String> speeds = ["Speeds"];
@@ -117,13 +110,6 @@ class _LocationScreenState extends State<LocationScreen> {
     String s1 = endWords.join(' ');
     return s1;
   }
-  // void main() {
-  //   final string1 = "Hello#123World!";
-  //   final string2 = "Hello123 World?";
-  //
-  //   final result = compareStrings(string1, string2);
-  //   print(result); // Output: true
-  // }
 
   Future<String> textFunc(String s) async {
     // await player.setAsset("assets/sounds/go.wav");
@@ -440,188 +426,13 @@ class _LocationScreenState extends State<LocationScreen> {
               ),
               body: Column (
                 children: [
-                  // Container(
-                  //   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 50),
-                  //   child: const Row(
-                  //     children: [
-                  //       Icon(Icons.account_circle_outlined, size: 40, color: Colors.black),
-                  //       SizedBox(width: 10),
-                  //       Column(
-                  //         crossAxisAlignment: CrossAxisAlignment.start,
-                  //         children: [
-                  //           Text("Welcome!", style: TextStyle(fontFamily: 'Poppins', fontSize: 15, color: Colors.black)),
-                  //           Text("User", style: TextStyle(fontFamily: 'Poppins', fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black)),
-                  //         ],
-                  //       ),
-                  //       Spacer(
-                  //       ),
-                  //       Icon(Icons.menu_outlined, size: 30, color: Colors.black)
-                  //     ],
-                  //   ),
-                  // ),
-                  //
-                  // Container(
-                  //   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  //   margin: const EdgeInsets.symmetric(horizontal: 20),
-                  //   decoration: BoxDecoration(
-                  //     color: const Color.fromARGB(255, 212, 211, 211),
-                  //     borderRadius: BorderRadius.circular(20),
-                  //   ),
-                  //   child: Row(
-                  //     children: [
-                  //       const Text("Unitree Go 1", style: TextStyle(fontFamily: 'Poppins', fontSize: 20, color: Colors.black)),
-                  //       const Spacer(),
-                  //
-                  //       _isOnline ? const Text("Online", style: TextStyle(fontFamily: 'Poppins',
-                  //           fontSize: 15,
-                  //           color: Colors.black))
-                  //           : const Text("Offline", style: TextStyle(fontFamily: 'Poppins',
-                  //           fontSize: 15,
-                  //           color: Colors.black)),
-                  //       // draw a circle here
-                  //       _isOnline ? Container(
-                  //         margin: const EdgeInsets.only(left: 5),
-                  //         width: 10,
-                  //         height: 10,
-                  //         decoration: const BoxDecoration(
-                  //           color: Colors.green,
-                  //           shape: BoxShape.circle,
-                  //         ),
-                  //       )
-                  //           : Container(
-                  //         margin: const EdgeInsets.only(left: 5),
-                  //         width: 10,
-                  //         height: 10,
-                  //         decoration: const BoxDecoration(
-                  //           color: Colors.red,
-                  //           shape: BoxShape.circle,
-                  //         ),
-                  //       )
-                  //     ],
-                  //   ),
-                  // ),
-                  //
-                  // Container(
-                  //   margin: const EdgeInsets.only(right: 20, top:20),
-                  //   child: Row(
-                  //     crossAxisAlignment: CrossAxisAlignment.center,
-                  //     mainAxisAlignment: MainAxisAlignment.end,
-                  //     children:  [
-                  //       Icon(Icons.pets_outlined, size: 15, color: Colors.black),
-                  //       Text(" $currentStatus", style: TextStyle(fontFamily: 'Poppins', fontSize: 15, color: Colors.black)),
-                  //     ],
-                  //   ),
-                  // ),
-                  //
-                  // Container(
-                  //   width: double.infinity,
-                  //   padding: const EdgeInsets.symmetric(vertical: 0),
-                  //   child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  //     Container(
-                  //       margin: const EdgeInsets.all(30),
-                  //       width: MediaQuery.of(context).size.width * 0.3,
-                  //       height: MediaQuery.of(context).size.height * 0.05,
-                  //       decoration: const BoxDecoration(
-                  //         borderRadius: BorderRadius.all(
-                  //           Radius.circular(10),
-                  //         ),
-                  //         color: kTextColor,
-                  //       ),
-                  //       child: Center(
-                  //         child: TextButton(
-                  //           onPressed: () async {
-                  //             sendCommand("stand");
-                  //           },
-                  //           child: const Text(
-                  //             'Stand',
-                  //             style: TextStyle(
-                  //               color: kPrimaryColor,
-                  //               fontSize: 20,
-                  //               fontFamily: 'Poppins',
-                  //             ),
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //     Container(
-                  //       margin: const EdgeInsets.all(30),
-                  //       width: MediaQuery.of(context).size.width * 0.3,
-                  //       height: MediaQuery.of(context).size.height * 0.05,
-                  //       decoration: const BoxDecoration(
-                  //         borderRadius: BorderRadius.all(
-                  //           Radius.circular(10),
-                  //         ),
-                  //         color: kTextColor,
-                  //       ),
-                  //       child: Center(
-                  //         child: TextButton(
-                  //           onPressed: () async {
-                  //             sendCommand("sit");
-                  //           },
-                  //           child: const Text(
-                  //             'Sit',
-                  //             style: TextStyle(
-                  //               color: kPrimaryColor,
-                  //               fontSize: 20,
-                  //               fontFamily: 'Poppins',
-                  //             ),
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ]),
-                  // ),
+
                   Container(
                     child: Text(
                       txt.data.toString(),
                     ),
                   ),
 
-
-                  // SizedBox(
-                  //     width: 300,
-                  //     child: DropdownButtonFormField<String>(
-                  //         decoration: InputDecoration(
-                  //             enabledBorder: OutlineInputBorder(
-                  //                 borderRadius: BorderRadius.circular(12),
-                  //                 borderSide: BorderSide(width: 3, color: Colors.black)
-                  //             )
-                  //         ),
-                  //         items: maps
-                  //             .map((map) => DropdownMenuItem<String>(
-                  //             value: map,
-                  //             child: Text(
-                  //                 map,
-                  //                 style: TextStyle(
-                  //                   color: Colors.black,
-                  //                   fontSize: 20,
-                  //                   fontFamily: 'Poppins',
-                  //                 )
-                  //             ))).toList(),
-                  //         value: selectedMap,
-                  //         onChanged: (map) async {
-                  //           // print("/////////////////////////////////////////");
-                  //           // print(map.toString());
-                  //           // print("???????????????????????????????????????????");
-                  //           String s4 = await sendCommand("get_start_and_goal:" + map.toString());
-                  //           // String s4 = "";
-                  //           // if(maps.toString() == "maps") {
-                  //           //   s4 = "rooms:stairs";
-                  //           // } else {
-                  //           //   s4 = "chairs:tables";
-                  //           // }
-                  //           // print(s4);
-                  //           setState(()  {
-                  //             selectedMap = map;
-                  //             List<String> locs = textBefColon(s4);
-                  //             print(locs);
-                  //             locations1 = textToList(locs[0]);
-                  //             selectedStart = locations1[0];
-                  //             locations2 = textToList(locs[1]);
-                  //             selectedEnd = locations2[0];
-                  //           });
-                  //         })
-                  // ),
                   const SizedBox(height: 150,),
                   SizedBox(
                     width: 300,
@@ -647,7 +458,7 @@ class _LocationScreenState extends State<LocationScreen> {
                         onChanged: (start) => setState(() {
                           selectedStart = start;
                           print("set_initial_pose:" + selectedStart.toString());
-                          // sendCommand("set_initial_pose:" + selectedStart.toString());
+                          sendCommand("set_initial_pose:" + selectedStart.toString());
                         })),
                   ),
                   const SizedBox(height: 50,),
@@ -675,38 +486,11 @@ class _LocationScreenState extends State<LocationScreen> {
                         onChanged: (end) => setState(() {
                           selectedEnd = end;
                           print("set_goal:" + selectedEnd.toString());
-                          // sendCommand("set_goal:" + selectedEnd.toString());
+                          sendCommand("set_goal:" + selectedEnd.toString());
                         })),
                   ),
                   const SizedBox(height: 70,),
-                  // SizedBox(
-                  //   width: 300,
-                  //   child: DropdownButtonFormField<String>(
-                  //       decoration: InputDecoration(
-                  //           enabledBorder: OutlineInputBorder(
-                  //               borderRadius: BorderRadius.circular(12),
-                  //               borderSide: BorderSide(width: 3, color: Colors.black)
-                  //           )
-                  //       ),
-                  //       items: speeds
-                  //           .map((speed) => DropdownMenuItem<String>(
-                  //           value: speed,
-                  //           child: Text(
-                  //               speed,
-                  //               style: TextStyle(
-                  //                 color: Colors.black,
-                  //                 fontSize: 20,
-                  //                 fontFamily: 'Poppins',
-                  //               )
-                  //           ))).toList(),
-                  //       value: selectedSpeed,
-                  //       onChanged: (speed) => setState(() {
-                  //         selectedSpeed = speed;
-                  //         print("Selected speed is: $selectedSpeed");
-                  //         sendCommand("set_goal:$selectedEnd");
-                  //       })),
-                  // ),
-                  // const SizedBox(height: 20,),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -722,7 +506,7 @@ class _LocationScreenState extends State<LocationScreen> {
                         ),
                         onPressed: () {
                           currentStatus = "Walking";
-                          // sendCommand("start_move");
+                          sendCommand("start_move");
                           setState(() {
                             _isRunning = true;
                             Navigator.push(context, MaterialPageRoute(builder: (context) => ControlScreen(
@@ -734,9 +518,6 @@ class _LocationScreenState extends State<LocationScreen> {
                               selectedEnd: selectedEnd.toString(),
                             )));
                           });
-                          // String goal_id = _character.toString().split('.').last;
-                          // print("Goal ID: $goal_id");
-                          // sendCommand(goal_id);
                         },
                         child: const Text(
                           'Start Navigation',
@@ -746,28 +527,6 @@ class _LocationScreenState extends State<LocationScreen> {
                           ),
                         ),
                       ),
-                      // const SizedBox(width: 30,),
-                      // TextButton(
-                      //   style: ButtonStyle(
-                      //       backgroundColor: const MaterialStatePropertyAll(Colors.black),
-                      //       alignment: Alignment.center,
-                      //       shape: MaterialStateProperty.all(
-                      //           RoundedRectangleBorder(
-                      //             borderRadius: BorderRadius.circular(12.0),
-                      //           )
-                      //       )
-                      //   ),
-                      //   onPressed: () {
-                      //     Navigator.pushNamed(context, 'coordinates_screen');
-                      //   },
-                      //   child: Text(
-                      //     'Add Coordinates',
-                      //     style: TextStyle(
-                      //       color: Colors.white,
-                      //       fontSize: 20,
-                      //     ),
-                      //   ),
-                      // ),
                     ],
                   ),
                   SizedBox(height: 20,),
@@ -796,13 +555,8 @@ class _LocationScreenState extends State<LocationScreen> {
                   onTapUp: (details) async {
                     setState(() async {
                       _isListening = false;
-                      print("Text before: " + text);
                       textFunc(text);
-                      text="";
-                      print("Text after: " + text);
-
                     });
-                    _speech.stop();
                   },
                   child: CircleAvatar(
                     backgroundColor: kPrimaryColor,
@@ -824,48 +578,6 @@ class _LocationScreenState extends State<LocationScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      // IconButton(
-                      //   onPressed: () {
-                      //     if (_isRunning) {
-                      //       sendCommand("pause_move");
-                      //       currentStatus = "Standing Idle";
-                      //     } else {
-                      //       sendCommand("start_move");
-                      //       currentStatus = "Walking";
-                      //     }
-                      //     setState(() {
-                      //       _isRunning = !_isRunning;
-                      //     });
-                      //   },
-                      //   icon: Icon(
-                      //     _isRunning ? Icons.pause : Icons.play_arrow_rounded,
-                      //     color: Colors.white,),
-                      // ),
-                      // SizedBox(width: 50,),
-                      //
-                      // IconButton(
-                      //   onPressed: () async {
-                      //     Navigator.push(context, MaterialPageRoute(builder: (context) => MapChoiceScreen()));
-                      //     // if (_isOnline) {
-                      //     //   sendCommand("stop_nav");
-                      //     //   setState(() {
-                      //     //     Navigator.pushNamed(context, 'maps_list');
-                      //     //     _isOnline = !_isOnline;
-                      //     //   });
-                      //     // } else {
-                      //     //   String s3 = await sendCommand("start");
-                      //     //   setState(() {
-                      //     //     Navigator.pushNamed(context, 'maps_list');
-                      //     //     maps = textToList(s3);
-                      //     //     selectedMap = maps[0];
-                      //     //     _isOnline = !_isOnline;
-                      //     //     speeds = ["slow", "med", "fast"];
-                      //     //     selectedSpeed = "slow";
-                      //     //   });
-                      //     // }
-                      //   },
-                      //   icon: const Icon(Icons.power_settings_new, color: Colors.white,),
-                      // ),
                     ],
                   ),
                 ),
@@ -875,76 +587,3 @@ class _LocationScreenState extends State<LocationScreen> {
     );
   }
 }
-// Container(
-//   margin: EdgeInsets.all(20),
-//   decoration: BoxDecoration(
-//     border: Border.all(
-//       color: Colors.black,
-//       width: 2,
-//     ),
-//     borderRadius: BorderRadius.circular(20),
-//   ),
-//   child: Column(children: [
-//     ListTile(
-//       title: const Text('Position 1'),
-//       leading: Radio<Locations>(
-//         value: Locations.goal1,
-//         groupValue: _character,
-//         onChanged: (Locations? value) {
-//           setState(() {
-//             _character = value;
-//           });
-//         },
-//       ),
-//     ),
-//     ListTile(
-//       title: const Text('Position 2'),
-//       leading: Radio<Locations>(
-//         value: Locations.goal2,
-//         groupValue: _character,
-//         onChanged: (Locations? value) {
-//           setState(() {
-//             _character = value;
-//           });
-//         },
-//       ),
-//     ),
-//     ListTile(
-//       title: const Text('Position 3'),
-//       leading: Radio<Locations>(
-//         value: Locations.goal3,
-//         groupValue: _character,
-//         onChanged: (Locations? value) {
-//           setState(() {
-//             _character = value;
-//           });
-//         },
-//       ),
-//     ),
-//     ListTile(
-//       title: const Text('Position 4'),
-//       leading: Radio<Locations>(
-//         value: Locations.goal4,
-//         groupValue: _character,
-//         onChanged: (Locations? value) {
-//           setState(() {
-//             _character = value;
-//           });
-//         },
-//       ),
-//     ),
-//     ListTile(
-//       title: const Text('Position 5'),
-//       leading: Radio<Locations>(
-//         value: Locations.goal5,
-//         groupValue: _character,
-//         onChanged: (Locations? value) {
-//           setState(() {
-//             _character = value;
-//           });
-//         },
-//       ),
-//     ),
-//   ],),
-// ),
-

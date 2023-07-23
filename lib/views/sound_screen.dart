@@ -38,7 +38,7 @@ class _SoundScreenState extends State<SoundScreen> {
   bool _isListening = false;
   bool _isOnline = false;
   bool _isRunning = false;
-  String currentStatus = "Idle";
+  String currentStatus = "Walking";
   SpeechToText _speech = SpeechToText();
   final player = AudioPlayer();
   String? selectedMap = "maps";
