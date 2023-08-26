@@ -48,6 +48,8 @@ dependencies:
   kdbush: ^0.0.5
   tuple: ^2.0.2
   geolocator: ^9.0.2
+  flutter_compass: ^0.7.0
+  permission_handler: ^10.4.3
 
 
 

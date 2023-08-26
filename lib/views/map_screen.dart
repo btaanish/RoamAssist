@@ -1,9 +1,9 @@
-// @dart=3.0.5
 import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+
 
 class MapScreen extends StatefulWidget {
   Function addCoordinates;
@@ -28,6 +28,7 @@ class _MapScreenState extends State<MapScreen> {
   LocationData? currentLocation;
   LatLng? selectedLocation = const LatLng(0.0, 0.0);
 
+
   void getCurrentLocation() async {
     Location location = Location();
 
@@ -40,7 +41,7 @@ class _MapScreenState extends State<MapScreen> {
     GoogleMapController googleMapController = await _controller.future;
 
     location.onLocationChanged.listen((event) {
-      (newLoc) {
+          (newLoc) {
         currentLocation = newLoc;
 
         googleMapController.animateCamera(
@@ -78,6 +79,7 @@ class _MapScreenState extends State<MapScreen> {
   //   });
   // }
 
+
   @override
   void initState() {
     getCurrentLocation();
@@ -103,62 +105,38 @@ class _MapScreenState extends State<MapScreen> {
         ),
         body: currentLocation == null
             ? Text('Loading')
-            : Stack(
-              children: [
-                Container(
-                child: GoogleMap(
-                    onMapCreated: _onMapCreated,
-                    initialCameraPosition: CameraPosition(
-                      target: LatLng(
-                          currentLocation!.latitude!, currentLocation!.longitude!),
-                      zoom: 18.0,
-                    ),
-                    onTap: (LatLng latLng) {
-                      final lat = latLng.latitude;
-                      final long = latLng.longitude;
-                      if (lat != null && long != null) {
-                        setState(() {
-                          selectedLocation = LatLng(lat, long);
-                        });
-                      }
-                      print(lat);
-                      widget.addCoordinates(long, lat);
-                    },
-                    markers: {
-                      Marker(
-                        markerId: MarkerId('currentLocation'),
-                        icon: markerIcon,
-                        position: LatLng(currentLocation!.latitude!,
-                            currentLocation!.longitude!),
-                      ),
-                      Marker(
-                        markerId: MarkerId('selectedLocation'),
-                        position: LatLng(selectedLocation!.latitude!,
-                            selectedLocation!.longitude!),
-                      ),
-                    },
-                  ),
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-
-                    child: const Text('Choose', style: TextStyle(fontSize: 20, color: Colors.white),),
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                  ),
-                ),
-              ),]
+            : GoogleMap(
+          onMapCreated: _onMapCreated,
+          initialCameraPosition: CameraPosition(
+            target: LatLng(
+                currentLocation!.latitude!, currentLocation!.longitude!),
+            zoom: 18.0,
+          ),
+          onTap: (LatLng latLng) {
+            final lat = latLng.latitude;
+            final long = latLng.longitude;
+            if (lat != null && long != null) {
+              setState(() {
+                selectedLocation = LatLng(lat, long);
+              });
+            }
+            print(lat);
+            widget.addCoordinates(long, lat);
+          },
+          markers: {
+            Marker(
+              markerId: MarkerId('currentLocation'),
+              icon: markerIcon,
+              position: LatLng(currentLocation!.latitude!,
+                  currentLocation!.longitude!),
             ),
+            Marker(
+              markerId: MarkerId('selectedLocation'),
+              position: LatLng(selectedLocation!.latitude!,
+                  selectedLocation!.longitude!),
+            ),
+          },
+        ),
       ),
     );
   }

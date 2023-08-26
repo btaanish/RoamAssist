@@ -1,5 +1,7 @@
 // @dart=3.0.5
 import 'package:flutter/material.dart';
+import 'package:flutter_compass/flutter_compass.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:roam_assist/widgets/coordinate_input.dart';
 import 'package:roam_assist/models/coordinates.dart';
 import 'package:roam_assist/widgets/coordinates_list.dart';
@@ -40,9 +42,56 @@ class _CoordinatesScreenState extends State<CoordinatesScreen> {
   // For Live Location!
   double long = 0.00;
   double lat = 0.00;
+  double bearing = 0.00;
+  double compass = 0.00;
+  bool _hasPermissions = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchPermissionStatus();
+  }
 
   StreamSubscription<Position>? positionStream;
   bool stream_status = false;
+
+  void _fetchPermissionStatus() {
+    Permission.locationWhenInUse.status.then((status) => {
+      if (mounted) {
+        setState(() {
+          _hasPermissions = (status == PermissionStatus.granted);
+        })
+      }
+    });
+  }
+
+  // Widget _buildCompass() {
+  //   return StreamBuilder<CompassEvent>(
+  //     stream: FlutterCompass.events,
+  //       builder: (context, snapshot) {
+  //         if (snapshot.hasError) {
+  //           return Text('Error reading heading: ${snapshot.error}' );
+  //         }
+  //
+  //         if (snapshot.connectionState == ConnectionState.waiting) {
+  //           return const Center(
+  //             child: CircularProgressIndicator(),
+  //           );
+  //         }
+  //
+  //         double? direction = snapshot.data!.heading;
+  //
+  //         if (direction == null) {
+  //           return const Center(
+  //             child:  Text('Device does not have sensors'),
+  //           );
+  //         }
+  //
+  //         compass = direction;
+  //         return Text(direction.toString());
+  //       }
+  //   );
+  // }
 
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
@@ -77,15 +126,18 @@ class _CoordinatesScreenState extends State<CoordinatesScreen> {
     );
     positionStream =
     Geolocator.getPositionStream(locationSettings: locationSettings)
-        .listen((Position? position) {
-
+        .listen((Position? position) async {
+      final CompassEvent tmp = await FlutterCompass.events!.first;
       setState(() {
         position == null
             ? 'Unknown'
             : {
           lat = position.latitude,
-          long = position.longitude
+          long = position.longitude,
+          bearing = Geolocator.bearingBetween(lat, long, coordinates_list[0].latitude, coordinates_list[0].longitude),
+          compass = tmp.heading!
         };
+
       });
     });
 
@@ -123,21 +175,21 @@ class _CoordinatesScreenState extends State<CoordinatesScreen> {
                   children: [
                     TextButton(
                       onPressed: () {
-                        if (stream_status == false) {
                           _determinePosition();
-                        } else {
-                          positionStream?.resume();
-                        }
-
+                          Permission.locationWhenInUse.request().then((ignored) {
+                            _fetchPermissionStatus();
+                          });
+                          // _buildCompass();
                       },
                       child: Text('start tracking'),
                     ),
                     TextButton(
                       onPressed: () {
-                        positionStream?.pause();
+                        positionStream?.cancel();
                         setState(() {
                           lat = 0.00;
                           long = 0.00;
+                          bearing = 0.00;
                         });
                       },
                       child: Text('stop tracking'),
@@ -149,6 +201,8 @@ class _CoordinatesScreenState extends State<CoordinatesScreen> {
                     children: [
                       Text(long.toString()),
                       Text(lat.toString()),
+                      Text(bearing.toString()),
+                      Text(compass.toString())
                     ],
                   ),
                 )
@@ -209,7 +263,7 @@ class _CoordinatesScreenState extends State<CoordinatesScreen> {
                 children: [
                   TextButton(
                     onPressed: () {
-                      
+
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
@@ -242,10 +296,10 @@ class _CoordinatesScreenState extends State<CoordinatesScreen> {
                 children: [
                   TextButton(
                     onPressed: () {
-                      Navigation navigate = Navigation();
-                      navigate.getRoute(Coordinates(latitude: 1.2946900584496173, longitude: 103.77341260752276), Coordinates(latitude: 1.2948466915714363, longitude: 103.77367303592946));
-                      // showModalBottomSheet(
-                      //     context: context, builder: buildBottomSheet);
+                      // Navigation navigate = Navigation();
+                      // navigate.getRoute(Coordinates(latitude: 1.2946900584496173, longitude: 103.77341260752276), Coordinates(latitude: 1.2948466915714363, longitude: 103.77367303592946));
+                      showModalBottomSheet(
+                          context: context, builder: buildBottomSheet);
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
