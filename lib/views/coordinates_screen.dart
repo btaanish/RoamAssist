@@ -7,8 +7,7 @@ import 'package:roam_assist/models/coordinates.dart';
 import 'package:roam_assist/widgets/coordinates_list.dart';
 import 'dart:async';
 import 'package:geolocator/geolocator.dart';
-import 'package:roam_assist/navigation.dart';
-
+import 'package:roam_assist/models/tts.dart';
 
 class CoordinatesScreen extends StatefulWidget {
   const CoordinatesScreen({super.key});
@@ -49,6 +48,7 @@ class _CoordinatesScreenState extends State<CoordinatesScreen> {
   @override
   void initState() {
     super.initState();
+    _initSpeechTimer();
     _fetchPermissionStatus();
   }
 
@@ -57,41 +57,14 @@ class _CoordinatesScreenState extends State<CoordinatesScreen> {
 
   void _fetchPermissionStatus() {
     Permission.locationWhenInUse.status.then((status) => {
-      if (mounted) {
-        setState(() {
-          _hasPermissions = (status == PermissionStatus.granted);
-        })
-      }
-    });
+          if (mounted)
+            {
+              setState(() {
+                _hasPermissions = (status == PermissionStatus.granted);
+              })
+            }
+        });
   }
-
-  // Widget _buildCompass() {
-  //   return StreamBuilder<CompassEvent>(
-  //     stream: FlutterCompass.events,
-  //       builder: (context, snapshot) {
-  //         if (snapshot.hasError) {
-  //           return Text('Error reading heading: ${snapshot.error}' );
-  //         }
-  //
-  //         if (snapshot.connectionState == ConnectionState.waiting) {
-  //           return const Center(
-  //             child: CircularProgressIndicator(),
-  //           );
-  //         }
-  //
-  //         double? direction = snapshot.data!.heading;
-  //
-  //         if (direction == null) {
-  //           return const Center(
-  //             child:  Text('Device does not have sensors'),
-  //           );
-  //         }
-  //
-  //         compass = direction;
-  //         return Text(direction.toString());
-  //       }
-  //   );
-  // }
 
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
@@ -125,25 +98,65 @@ class _CoordinatesScreenState extends State<CoordinatesScreen> {
       distanceFilter: 0, // distance moved before next location ping
     );
     positionStream =
-    Geolocator.getPositionStream(locationSettings: locationSettings)
-        .listen((Position? position) async {
+        Geolocator.getPositionStream(locationSettings: locationSettings)
+            .listen((Position? position) async {
       final CompassEvent tmp = await FlutterCompass.events!.first;
       setState(() {
         position == null
             ? 'Unknown'
             : {
-          lat = position.latitude,
-          long = position.longitude,
-          bearing = Geolocator.bearingBetween(lat, long, coordinates_list[0].latitude, coordinates_list[0].longitude),
-          compass = tmp.heading!
-        };
-
+                lat = position.latitude,
+                long = position.longitude,
+                bearing = Geolocator.bearingBetween(
+                    lat,
+                    long,
+                    coordinates_list[0].latitude,
+                    coordinates_list[0].longitude),
+                compass = tmp.heading!
+              };
       });
     });
 
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
     return await Geolocator.getCurrentPosition();
+  }
+
+  final Speech tts = Speech();
+  late Timer _speechTimer;
+  bool _isSpeaking = false;
+
+  void _initSpeechTimer() {
+    _speechTimer = Timer.periodic(Duration(seconds: 2), (timer) {
+      if (!_isSpeaking) {
+        _speakCommands();
+      }
+    });
+  }
+
+  void _speakCommands() async {
+    if (coordinates_list.isNotEmpty) {
+      double bearingDiff = compass - bearing;
+
+      if (bearingDiff > 10) {
+        await tts.speak_turn_left();
+      } else if (bearingDiff < -10) {
+        await tts.speak_turn_right();
+      } else {
+        await tts.speak_walk_straight();
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _speechTimer.cancel();
+    super.dispose();
+  }
+
+  void _stopSpeech() {
+    tts.stop(); // Stop the speech
+    _speechTimer.cancel(); // Cancel the speech timer
   }
 
   @override
@@ -175,11 +188,11 @@ class _CoordinatesScreenState extends State<CoordinatesScreen> {
                   children: [
                     TextButton(
                       onPressed: () {
-                          _determinePosition();
-                          Permission.locationWhenInUse.request().then((ignored) {
-                            _fetchPermissionStatus();
-                          });
-                          // _buildCompass();
+                        _determinePosition();
+                        Permission.locationWhenInUse.request().then((ignored) {
+                          _fetchPermissionStatus();
+                        });
+                        // _buildCompass();
                       },
                       child: Text('start tracking'),
                     ),
@@ -208,24 +221,6 @@ class _CoordinatesScreenState extends State<CoordinatesScreen> {
                 )
               ],
             ),
-
-            // Container(
-            //     margin: const EdgeInsets.symmetric(horizontal: 30),
-            //     child: DropdownButton(
-            //       value: selectedValue,
-            //       borderRadius: BorderRadius.circular(20),
-            //       style: const TextStyle(
-            //           color: Colors.black, fontSize: 20, fontFamily: 'Poppins'),
-            //       focusColor: const Color.fromARGB(255, 212, 211, 211),
-            //       isExpanded: true,
-            //       dropdownColor: const Color.fromARGB(255, 212, 211, 211),
-            //       items: dropdownItems,
-            //       onChanged: (value) {
-            //         setState(() {
-            //           selectedValue = value.toString();
-            //         });
-            //       },
-            //     )),
             SizedBox(
               height: 100,
             ),
@@ -263,7 +258,9 @@ class _CoordinatesScreenState extends State<CoordinatesScreen> {
                 children: [
                   TextButton(
                     onPressed: () {
-
+                      tts.speak_start(); // Start the journey and activate speech
+                      _initSpeechTimer(); // Start the speech timer
+                      _speakCommands(); // Determine and speak turn commands
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
@@ -275,21 +272,52 @@ class _CoordinatesScreenState extends State<CoordinatesScreen> {
                       child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text("Take me there",
-                              style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 20,
-                                  color: Colors.black)),
+                          Text(
+                            "Take me there",
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 20,
+                              color: Colors.black,
+                            ),
+                          ),
                           Spacer(),
                           Icon(Icons.arrow_circle_right, color: Colors.black),
+
                         ],
                       ),
                     ),
                   ),
+                  TextButton(
+                    onPressed: () {
+                      _stopSpeech(); // Stop the speech and timer
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.red, // Use a different color for the terminate button
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Terminate",
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 20,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Spacer(),
+                          Icon(Icons.close, color: Colors.white),
+                        ],
+                      ),
+                    ),
+                  ),
+
                 ],
               ),
             ),
-
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
               child: Column(
@@ -329,6 +357,5 @@ class _CoordinatesScreenState extends State<CoordinatesScreen> {
         ),
       ),
     );
-    ;
   }
 }
