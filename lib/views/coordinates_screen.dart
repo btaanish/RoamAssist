@@ -8,6 +8,8 @@ import 'package:roam_assist/widgets/coordinates_list.dart';
 import 'dart:async';
 import 'package:geolocator/geolocator.dart';
 import 'package:roam_assist/models/tts.dart';
+import 'package:roam_assist/navigation.dart';
+import 'package:tuple/tuple.dart';
 
 class CoordinatesScreen extends StatefulWidget {
   const CoordinatesScreen({super.key});
@@ -39,10 +41,10 @@ class _CoordinatesScreenState extends State<CoordinatesScreen> {
   }
 
   // For Live Location!
-  double long = 0.00;
-  double lat = 0.00;
-  double bearing = 0.00;
-  double compass = 0.00;
+  double long = 0.00; //user's current location
+  double lat = 0.00;  //users current location
+  double bearing = 0.00; // from user to target
+  double compass = 0.00;  // where the user is facing now
   bool _hasPermissions = false;
 
   @override
@@ -101,17 +103,15 @@ class _CoordinatesScreenState extends State<CoordinatesScreen> {
         Geolocator.getPositionStream(locationSettings: locationSettings)
             .listen((Position? position) async {
       final CompassEvent tmp = await FlutterCompass.events!.first;
+      Navigation navigate = Navigation();
+      Tuple2<double,double> res = await navigate.getRoute(Coordinates(latitude: lat , longitude: long ), coordinates_list[0]);
       setState(() {
         position == null
             ? 'Unknown'
             : {
                 lat = position.latitude,
                 long = position.longitude,
-                bearing = Geolocator.bearingBetween(
-                    lat,
-                    long,
-                    coordinates_list[0].latitude,
-                    coordinates_list[0].longitude),
+                bearing = res.item2,
                 compass = tmp.heading!
               };
       });

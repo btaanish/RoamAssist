@@ -62,7 +62,7 @@ class Navigation {
 
 
   // give a list of waypoints between start and end
-  void getRoute(Coordinates start, Coordinates end) async {
+  Future<Tuple2<double,double>> getRoute(Coordinates start, Coordinates end) async {
     const APIKEY = "AIzaSyBgTZioZoYsFeE33WHy_biJDXKEKgABTeg";
     String origin = "${start.latitude},${start.longitude}";
     String destination = "${end.latitude},${end.longitude}";
@@ -71,34 +71,16 @@ class Navigation {
     try {
       http.Response response = await http.get(Uri.parse(url));
       var data = jsonDecode(response.body);
-      var encoded_polyline = data["routes"][0]["overview_polyline"]["points"];
-      List<Coordinates> waypoints = decodeEncodedPolyline(encoded_polyline);
-      var tuple = findNearest(waypoints, Coordinates(latitude: 1.2946900584496173, longitude: 103.77341260752276));
-      final double nearestDistance = tuple.item1;
-      final double bearing = tuple.item2;
-      print(nearestDistance);
-      print(bearing);
-
-      // var steps = data["routes"][0]["legs"][0]["steps"];
-      // List<Waypoint> waypointList = [];
-      // for (final step in steps) {
-      //   double distance = step["distance"]["value"].toDouble();
-      //   double lat = step["end_location"]["lat"].toDouble();
-      //   double lng = step["end_location"]["lng"].toDouble();
-      //   Coordinates coordinates = Coordinates(latitude: lat , longitude: lng);
-      //   final htmlDirections = parse(step["html_instructions"]);
-      //   final String? parsedString = parse(htmlDirections.body?.text).documentElement?.text;
-      //   String orientation = step["maneuver"] ??= parsedString?.split(" ")[1];
-      //   Waypoint waypoint = Waypoint(distance: distance, end: coordinates, orientation: orientation);
-      //   waypointList.add(waypoint);
-      //
-      // }
-
-
+      var encodedPolyline = data["routes"][0]["overview_polyline"]["points"];
+      List<Coordinates> waypoints = decodeEncodedPolyline(encodedPolyline);
+      var tuple = findNearest(waypoints, Coordinates(latitude: start.latitude, longitude: start.longitude));
+      return tuple;
     } catch (e) {
       print(e.toString());
     }
+    return const Tuple2<double,double>(0.0,0.0);
   }
+
 
 
 
