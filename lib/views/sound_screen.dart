@@ -136,7 +136,9 @@ class _SoundScreenState extends State<SoundScreen> {
       selectedStart = widget.start;
       selectedEnd = widget.end;
       selectedMap = widget.selectMap;
-      await player.play(AssetSource("sounds/VoiceMode.wav"));
+      Future.delayed(const Duration(milliseconds: 1000), () async {
+        await player.play(AssetSource("sounds/VoiceMode.wav"));
+      });
       _firstOp = false;
       return "";
     } else {

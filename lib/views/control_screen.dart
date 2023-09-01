@@ -50,7 +50,9 @@ class _ControlScreenState extends State<ControlScreen> {
   Future<String> textFunc(String s) async {
     // await player.setAsset("assets/sounds/go.wav");
     if(_firstOp) {
-      await player.play(AssetSource("sounds/go.wav"));
+      Future.delayed(const Duration(milliseconds: 1000), () async {
+        await player.play(AssetSource("sounds/go.wav"));
+      });
       _firstOp = false;
       return "";
     }
@@ -301,13 +303,24 @@ class _ControlScreenState extends State<ControlScreen> {
                         icon: Icon(
                           _isRunning ? Icons.pause : Icons.play_arrow_rounded,
                           color: Colors.white,),
+                        tooltip: "Press to pause or unpause the dog",
                       ),
+
                       SizedBox(width: 50,),
 
                       IconButton(
                         onPressed: () async {
+                          setState(() {
+                            if(isStanding) {
+                              sendCommand("sit");
+                            } else {
+                              sendCommand("stand");
+                            }
+                            isStanding = !isStanding;
+                          });
                         },
-                        icon: const Icon(Icons.power_settings_new, color: Colors.white,),
+                        icon: Icon(isStanding ? Icons.man : Icons.accessibility_rounded, color: Colors.white,),
+                        tooltip: "Press to either let the robot stand or sit",
                       ),
                     ],
                   ),

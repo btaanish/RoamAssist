@@ -116,7 +116,9 @@ class _LocationScreenState extends State<LocationScreen> {
     if(_firstOp) {
       selectedStart = widget.locations1[0];
       selectedEnd = widget.locations2[0];
-      await player.play(AssetSource("sounds/LocationScreen.wav"));
+      Future.delayed(const Duration(milliseconds: 1000), () async {
+        await player.play(AssetSource("sounds/LocationScreen.wav"));
+      });
       _firstOp = false;
       return "";
     } else {
@@ -486,7 +488,7 @@ class _LocationScreenState extends State<LocationScreen> {
                         onChanged: (end) => setState(() {
                           selectedEnd = end;
                           print("set_goal:" + selectedEnd.toString());
-                          sendCommand("set_goal:" + selectedEnd.toString());
+                         sendCommand("set_goal:" + selectedEnd.toString());
                         })),
                   ),
                   const SizedBox(height: 70,),

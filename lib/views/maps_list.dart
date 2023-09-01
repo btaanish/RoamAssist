@@ -108,7 +108,9 @@ class _MapChoiceScreenState extends State<MapChoiceScreen> {
     // await player.setAsset("assets/sounds/go.wav");
     if(_firstOp) {
       selectedMap = widget.maps[0];
-      await player.play(AssetSource("sounds/MapScreen.wav"));
+      Future.delayed(const Duration(milliseconds: 1000), () async {
+        await player.play(AssetSource("sounds/MapScreen.wav"));
+      });
       _firstOp = false;
       return "";
     } else {
@@ -434,6 +436,7 @@ class _MapChoiceScreenState extends State<MapChoiceScreen> {
                                       borderSide: BorderSide(width: 3, color: Colors.black)
                                   )
                               ),
+                          hint: Text("Maps to chose from"),
                               items: widget.maps
                                   .map((map) => DropdownMenuItem<String>(
                                   value: map,
@@ -470,7 +473,8 @@ class _MapChoiceScreenState extends State<MapChoiceScreen> {
                                     selectMap: selectedMap.toString(),
                                   )));
                                 });
-                              })
+                              }
+                              )
                       ),
                     ),
 

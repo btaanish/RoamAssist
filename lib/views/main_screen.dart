@@ -105,7 +105,10 @@ class _MainScreenState extends State<MainScreen> {
   }
   Future<String> textFunc(String s) async {
     if(_firstOp) {
-      await player.play(AssetSource("sounds/OpeningScreen.wav"));
+      Future.delayed(const Duration(milliseconds: 1000), () async {
+
+        await player.play(AssetSource("sounds/OpeningScreen.wav"));
+      });
       _firstOp = false;
       return "";
     } else {
@@ -414,7 +417,7 @@ class _MainScreenState extends State<MainScreen> {
                               backColour = Colors.green;
                             });
                       } else {
-                            String s3 = await sendCommand("start");
+                        String s3 = await sendCommand("start");
                         sendCommand("stand");
                         // String s3 = "map 1, map 2";
                             setState(() {
@@ -443,7 +446,27 @@ class _MainScreenState extends State<MainScreen> {
                       icon: Icon(
                           Icons.power_settings_new_rounded,
                           size: 150,
-                      )),
+                      ),
+                    tooltip:"Press this button to begin"
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(40, 40, 60, 20),
+                  child: Container(
+                    width: 150, // Set the width to your desired size
+                    height: 150, // Set the height to your desired size
+                    child: IconButton(
+                        onPressed: () async {
+                          sendCommand("sound_id:0");
+                        },
+                        icon: Icon(
+                          Icons.surround_sound_outlined,
+                          size: 70,
+                        ),
+                      tooltip: "Press this button to check the location of your dog",
+                    ),
+
                   ),
                 ),
               ]
@@ -497,7 +520,7 @@ class _MainScreenState extends State<MainScreen> {
 //         onChanged: (Locations? value) {
 //           setState(() {
 //             _character = value;
-//           });
+//           }onChanged: = value);
 //         },
 //       ),
 //     ),
